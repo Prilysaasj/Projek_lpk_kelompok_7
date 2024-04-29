@@ -103,7 +103,7 @@ elif selected == 'Evaluasi Risiko Kolesterol':
         st.balloons()
 
 elif selected == 'Panduan Makanan Sehat':
-    st.header('Panduan Makanan Sehat', divider='green')
+    st.header('❤️‍🩹Panduan Makanan Sehat🥦', divider='green')
     st.write('''
             1. Yuk, makan yang rendah lemak jenuh dan kolesterol, seperti buah, sayur, ikan, dan biji-bijian!
             2. Hindari makanan olahan berlemak trans dan kolesterol tinggi, seperti makanan cepat saji.
