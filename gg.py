@@ -1,4 +1,5 @@
 import streamlit as st
+from streamlit_option_menu import option_menu
 
 # Menentukan nilai kolesterol dalam bahan pangan
 cholesterol_values = {
@@ -31,14 +32,14 @@ def evaluate_risk(total_cholesterol):
 # Bagian Depan Aplikasi
 st.title('Cholesterol Calculator For Foods🥩')  
 
-st.markdown('''Cholesterol Calculator For Foods digunakan untuk menghitung kandungan kolesterol pada makanan, 
-            menyajikan data jumlah kolesterol dalam tubuh sesuai usia, serta menyajikan panduan makanan sehat.
+st.markdown('''Cholesterol Calculator For Foods digunakan untuk menyajikan tabel makanan beserta jumlah kolesterol, menghitung kandungan kolesterol berdasarkan bobot makanan,
+             serta memberikan saran makanan sehat.
             ☆: .｡. o(≧▽≦)o .｡.:☆''')
 st.markdown('---')
 
 # Sidebar navigation
-selected = st.sidebar.radio('Menu', ['Perkenalan dan Penjelasan Singkat', 'Perhitungan Kolesterol', 'Evaluasi Risiko Kolesterol', 
-                                     'Panduan Makanan Sehat'])
+with st.sidebar:
+    selected = option_menu('Menu', ['Perkenalan dan Penjelasan Singkat', 'Daftar Makanan', 'Perhitungan Kolesterol', 'Menu Interaktif', 'Kotak Saran'], default_index=0)
 
 if selected == 'Perkenalan dan Penjelasan Singkat':
     st.markdown('KELOMPOK 7 (1E-PMIP):')
@@ -61,10 +62,71 @@ if selected == 'Perkenalan dan Penjelasan Singkat':
                 yang berisiko terkena penyakit jantung harus menjaga konsumsi kolesterol hariannya 
                 sekitar 200 mg.''')
 
+elif selected == 'Daftar Makanan':
+    st.header('🧀🍖Daftar Makanan🍔🥚')
+    st.markdown(
+            '<hr style="border: none; height: 5px; background: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);"/>',
+            unsafe_allow_html=True
+        )
+    st.markdown('''Menu ini menyajikan daftar makanan beserta jumlah kolesterolnya setiap bobot per 100 gram dalam satuan mg. Tabel Makanan ini berfungsi untuk memberikan informasi
+             kepada pengguna tentang berapa jumlah kolesterol dalam bahan pangan, ini disajikan dalam bobot per 100 gram makanan.
+             Untuk mengetahui jumlah kolesterol dalam bobot makanan yang kalian inginkan, silahkan klik menu perhitungan kolesterol ya!!''')
+    jenis_makanan = st.selectbox("Pilih Bahan Pangan:", ["Daging dan Unggas", "Ikan", "Susu dan Telur", "Makanan Lainnya"])
+    if jenis_makanan == "Daging dan Unggas":
+        st.markdown('''
+                | Nama Makanan |Jumlah Kolesterol (mg)|
+                |--------------|----------------------|
+                |Daging Kambing|71                    |
+                |Daging Sapi   |70                    |
+                |Daging Ayam   |63                    |
+                |Daging Bebek  |65                    |
+                |Daging Babi   |80                    |
+                |Daging Anjing |44,4                  |
+                |Daging Kalkun |77                    |
+                |Daging Unta   |61                    |
+                  ''')  
+    if jenis_makanan == "Ikan":
+        st.markdown('''
+                | Nama Makanan |Jumlah Kolesterol (mg)|
+                |--------------|----------------------|
+                |Ikan Tuna     |45                    |
+                |Ikan Salmon   |48                    |
+                |Ikan Lele     |60                    |
+                |Ikan Mujair   |55                    |
+                |Ikan Tongkol  |60                    |
+                |Ikan Gurame   |66                    |
+                |Ikan Patin    |39                    |         
+                ''')
+    if jenis_makanan == "Susu dan Telur":
+        st.markdown('''
+                | Nama Makanan |Jumlah Kolesterol (mg)|
+                |--------------|----------------------|
+                |Susu Sapi     |250                   |
+                |Telur         |155                   |
+                |Mentega       |215                   |
+                |Yoghurt       |45                    |
+                |Kuning Telur  |550                   |
+                |Keju          |140                   |        
+                ''')
+    if jenis_makanan == "Makanan Lainnya":
+        st.markdown('''
+                | Nama Makanan |Jumlah Kolesterol (mg)|
+                |--------------|----------------------|
+                |Sosis Daging  |150                   |
+                |Hamburger     |47                    |
+                |Seblak        |121                   |
+                |Bakso         |74                    |
+                |Kebab         |79                    |
+                |Coklat        |290                   |        
+                ''')    
+
 elif selected == 'Perhitungan Kolesterol':
-    st.header('Perhitungan Kolesterol', divider='rainbow')
+    st.header('Perhitungan Kolesterol Dalam Makanan🧮🍳', divider='red')
+    st.markdown('Nah, di sini Anda dapat memilih jenis bahan pangan, jenis makanan, serta bobot yang ingin Anda ketahui jumlah kolesterolnya dalam makanan tersebut.')
+    st.markdown('---')
     jenis_makanan = st.selectbox('Pilih Jenis Bahan Pangan', list(cholesterol_values.keys()))
-    nama_makanan = st.selectbox('Pilih Jenis Makanan', list(cholesterol_values[jenis_makanan].keys()))
+    makanan_list = list(cholesterol_values[jenis_makanan].keys()) # List makanan berdasarkan jenis makanan yang dipilih
+    nama_makanan = st.selectbox('Pilih jenis makanan', makanan_list)
     bobot = st.number_input('Masukkan bobot yang diinginkan (gram)', min_value=1, value=100)
 
     if st.button('Hitung Kolesterol'):
@@ -74,40 +136,77 @@ elif selected == 'Perhitungan Kolesterol':
         else:
             st.success(f'Perkiraan kolesterol dalam {nama_makanan} ({bobot}g): {total_cholesterol} mg')
             st.balloons()
+            st.markdown('---')
+            st.header('Saran Makanan', divider='blue')
+            if total_cholesterol < 200:
+                st.write("Hore! Kolesterol dalam makanan Anda rendah. Ini adalah beberapa saran untuk menjaga kesehatan dan mengatur pola makan Anda:")
+                st.write("- Pilih lebih banyak buah-buahan dan sayuran segar untuk menu sehari-hari.")
+                st.write("- Rasakan kelezatan ikan dan kacang-kacangan sebagai sumber protein yang lebih sehat.")
+                st.write("- Batasi makanan olahan dan makanan cepat saji yang tinggi lemak.")
+                st.write("- Tetap aktif! Berjalan-jalan, bersepeda, atau lakukan olahraga ringan setiap hari.")
+            elif 200 <= total_cholesterol < 240:
+                st.write("Hmm, kolesterol dalam makanan Anda sedang. Ini adalah beberapa saran untuk menjaga kesehatan dan mengatur pola makan Anda:")
+                st.write("- Pilih makanan rendah lemak dan tinggi serat seperti oatmeal dan buah-buahan.")
+                st.write("- Coba hidangkan ikan alih-alih daging merah untuk variasi yang lebih sehat.")
+                st.write("- Tetap aktif! Lakukan aktivitas fisik yang Anda nikmati setiap hari.")
+                st.write("- Jika Anda merasa perlu, konsultasikan dengan dokter untuk evaluasi lebih lanjut.")
+            else:
+                st.write("Oh tidak! Kolesterol dalam makanan Anda tinggi. Tapi jangan khawatir, ini adalah beberapa saran untuk memulai perubahan:")
+                st.write("- Batasi makanan tinggi lemak jenuh seperti daging berlemak dan produk olahan susu.")
+                st.write("- Cari sumber protein rendah lemak seperti tahu dan ayam tanpa kulit.")
+                st.write("- Hindari makanan cepat saji dan camilan tinggi lemak.")
+                st.write("- Aktivitas fisik adalah kunci! Cobalah berjalan kaki atau berenang untuk memulai.")
+                st.write("- Jika perlu, temui dokter untuk rencana pengelolaan yang lebih spesifik.")
 
-elif selected == 'Evaluasi Risiko Kolesterol':
-    st.header('Evaluasi Risiko Kolesterol', divider='blue')
-    st.write('''Menu "Evaluasi Risiko Kolesterol" digunakan untuk mengevaluasi risiko kesehatan berdasarkan tingkat kolesterol total dalam darah. Evaluasi risiko ini didasarkan pada kategori kolesterol total yang diberikan oleh American Heart Association (AHA). 
-            Berikut adalah kategori risiko kolesterol menurut AHA:''')
-    st.write('''
-             1. Risiko Kolesterol Rendah : Kolesterol total kurang dari 200 mg/dL.
-             2. Risiko Kolesterol Sedang : Kolesterol total antara 200 hingga 239 mg/dL.
-             3. Risiko Kolesterol Tinggi : Kolesterol total 240 mg/dL atau lebih.
-            
-             Melalui menu ini, Anda dapat memasukkan nilai kolesterol total Anda dalam satuan mg/dL, lalu mengevaluasi risiko kesehatannya.
-             Tujuan evaluasi risiko ini adalah untuk membantu Anda memahami tingkat kolesterol Anda dan mengambil langkah-langkah yang sesuai untuk menjaga kesehatan jantung Anda.
-             Klik menu 'Panduan Makanan Sehat' untuk mengetahuinya!''')
-    st.markdown('''
-            | Jenis kolesterol| Total Usia kurang dari 19 tahun| Pria dewasa berusia diatas 20 tahun|Wanita dewasa berusia diatas 20 tahun|
-            | --------------- | -------------------------------|------------------------------------|-------------------------------------|  
-            | LDL             | < 100 mg/dL                    | <100 mg/dL                         | <100 mg/dL                          |
-            | HDL             | <45 mg/dL                      | 40 mg/dL atau lebih                | 50 mg/dL atau lebih                 |
-            | Non-HDL         | <120 mg/dL                     | <130 mg/dL                         | <130 mg/dL                          |
-            | Total Kolesterol| <170 mg/dL                     | 125-200 mg/dL                      | 125-200 mg/dL                       |                 
-            ''')
-    
-    total_cholesterol = st.number_input('Masukkan total kolesterol (mg/dL)', min_value=0)
-    if st.button('Evaluasi Risiko'):
-        risk_evaluation = evaluate_risk(total_cholesterol)
-        st.success(f'Hasil evaluasi risiko: {risk_evaluation}')
+
+elif selected == 'Menu Interaktif':
+    st.header('Menu Interaktif 🍽️', divider='blue')
+
+    st.subheader('Tes Pengetahuan 📝')
+    st.write('''Yuk, tes pengetahuan tentang kolesterol akan mengasah pengetahuanmu tentang kesehatan! Ayo, kita jelajahi beberapa pertanyaan seru seputar kolesterol!''')
+    st.write('1. Apa yang dimaksud dengan kolesterol HDL?')
+    answer1 = st.radio('1.', options=['A. Kolesterol Baik', 'B. Kolesterol Jelek', 'C. Kolesterol Total'])
+    st.write('2. Makanan mana yang mengandung kolesterol tinggi?')
+    answer2 = st.radio('2.', options=['A. Buah-buahan', 'B. Sayuran', 'C. Daging merah'])
+    st.write('3. Bagaimana cara menurunkan kolesterol LDL?')
+    answer3 = st.radio('3.', options=['A. Mengonsumsi makanan tinggi lemak', 'B. Berolahraga secara teratur', 'C. Minum minuman bersoda'])
+
+    if st.button('Submit'):
+        score = 0
+        if answer1 == 'A. Kolesterol Baik':
+            score += 1
+        if answer2 == 'C. Daging merah':
+            score += 1
+        if answer3 == 'B. Berolahraga secara teratur':
+            score += 1
+        st.write(f'Nilai Anda: {score}/3')
         st.balloons()
+    st.markdown(
+            '<hr style="border: none; height: 5px; background: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);"/>',
+            unsafe_allow_html=True
+        )
+    st.subheader('Resep Sehat 🥗')
+    st.write('Ingin mencoba resep sehat rendah kolesterol? Lihat resep berikut ini:')
+    st.write('- Salad sayur dengan dressing lemon')
+    st.write('- Sosis sapi panggang dengan tumis sayuran')
+    st.write('- Smoothie buah-buahan segar dengan yogurt rendah lemak')
 
-elif selected == 'Panduan Makanan Sehat':
-    st.header('❤️‍🩹Panduan Makanan Sehat🥦', divider='green')
-    st.write('''
-            1. Yuk, makan yang rendah lemak jenuh dan kolesterol, seperti buah, sayur, ikan, dan biji-bijian!
-            2. Hindari makanan olahan berlemak trans dan kolesterol tinggi, seperti makanan cepat saji.
-            3. Pilih camilan tinggi serat, seperti oatmeal, kacang, dan biji-bijian.
-            4. Kurangi makanan manis, makanan olahan, dan minuman bergula.
-            5. Tetap aktif dengan bergerak dan berolahraga secara teratur.
-            6. Konsultasikan dengan dokter atau ahli gizi untuk rencana makan yang sesuai dengan kebutuhan kesehatan Anda.''')
+elif selected =='Kotak Saran':
+    st.header('Silahkan Sampaikan Saran Anda Disini Ya!',divider='green')
+    saran = st.text_area('Masukkan saran Anda di sini:')
+    # Tombol untuk mengirim saran
+    if st.button('Kirim'):
+    # Menyimpan saran ke dalam file atau database
+        with open('saran.txt', 'a') as file:
+            file.write(saran + '\n')
+        st.success('Terima kasih atas masukan Anda!')
+
+    # Menampilkan saran yang telah diterima
+    st.header('Saran yang Telah Diterima:')
+    if st.button('Muat Saran'):
+        with open('saran.txt', 'r') as file:
+            saran_list = file.readlines()
+        for idx, s in enumerate(saran_list):
+            st.write(f'{idx+1}. {s.strip()}')
+
+
