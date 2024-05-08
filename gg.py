@@ -37,8 +37,7 @@ st.markdown('''Cholesterol Calculator For Foods digunakan untuk menyajikan tabel
 st.markdown('---')
 
 # Sidebar navigation
-with st.sidebar:
-    selected = st.sidebar.radio('Menu', ['Perkenalan dan Penjelasan Singkat', 'Daftar Makanan', 'Perhitungan Kolesterol', 'Menu Interaktif', 'Kotak Saran'], default_index=0)
+selected = st.sidebar.radio('Menu', ['Perkenalan dan Penjelasan Singkat', 'Daftar Makanan', 'Perhitungan Kolesterol', 'Menu Interaktif', 'Kotak Saran'], default_index=0)
 
 if selected == 'Perkenalan dan Penjelasan Singkat':
     st.markdown('KELOMPOK 7 (1E-PMIP):')
