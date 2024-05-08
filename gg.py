@@ -1,5 +1,4 @@
 import streamlit as st
-from streamlit_option_menu import option_menu
 
 # Menentukan nilai kolesterol dalam bahan pangan
 cholesterol_values = {
@@ -39,7 +38,7 @@ st.markdown('---')
 
 # Sidebar navigation
 with st.sidebar:
-    selected = option_menu('Menu', ['Perkenalan dan Penjelasan Singkat', 'Daftar Makanan', 'Perhitungan Kolesterol', 'Menu Interaktif', 'Kotak Saran'], default_index=0)
+    selected = st.sidebar.radio('Menu', ['Perkenalan dan Penjelasan Singkat', 'Daftar Makanan', 'Perhitungan Kolesterol', 'Menu Interaktif', 'Kotak Saran'], default_index=0)
 
 if selected == 'Perkenalan dan Penjelasan Singkat':
     st.markdown('KELOMPOK 7 (1E-PMIP):')
